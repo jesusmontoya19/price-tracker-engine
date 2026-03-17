@@ -12,31 +12,7 @@ from google.oauth2.service_account import Credentials
 import json
 
 # ============================================================
-# PASO 1: AUTENTICACIÓN SEGURA CON GOOGLE SHEETS
-# ============================================================
-# Las credenciales viven en una variable de entorno llamada
-# GOOGLE_CREDENTIALS_JSON (un JSON completo de Service Account).
-# GitHub Actions la inyecta en tiempo de ejecución → nunca
-# toca el código ni el repositorio.
-
-def autenticar_sheets():
-    """Carga credenciales desde env-var y retorna el cliente gspread."""
-    creds_json = os.environ.get("GOOGLE_CREDENTIALS_JSON")
-    if not creds_json:
-        raise EnvironmentError("Variable GOOGLE_CREDENTIALS_JSON no encontrada.")
-
-    creds_dict = json.loads(creds_json)
-
-    scopes = [
-        "https://www.googleapis.com/auth/spreadsheets",
-        "https://www.googleapis.com/auth/drive.readonly",
-    ]
-    creds = Credentials.from_service_account_info(creds_dict, scopes=scopes)
-    return gspread.authorize(creds)
-
-
-# ============================================================
-# PASO 2: LEER LA PESTAÑA 'Configuracion'
+# PASO 1: LEER LA PESTAÑA 'Configuracion'
 # ============================================================
 # Se espera que la pestaña tenga encabezados en la fila 1:
 #   ID_Producto | Competidor | URL | Selector_CSS
